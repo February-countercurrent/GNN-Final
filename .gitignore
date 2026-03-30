@@ -131,3 +131,4 @@ lightning_logs
 data/
 mnist/
 logs/
+.DS_Store

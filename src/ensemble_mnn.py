@@ -1,8 +1,14 @@
 import os
+import sys
 import torch
 import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
+
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+RESULTS_DIR = os.path.join(PROJECT_ROOT, 'results')
 
 from mnn_core import BaseMNN
 
@@ -46,7 +52,7 @@ def negative_log_likelihood(target, mean_pred, var_pred, eps=1e-6):
     return torch.mean(nll)
 
 def run_uncertainty_experiment():
-    os.makedirs('../results', exist_ok=True)
+    os.makedirs(RESULTS_DIR, exist_ok=True)
     print("Running Ensemble MNN Uncertainty Experiment...")
 
     # 1. Plot NLL Calibration
@@ -62,9 +68,10 @@ def run_uncertainty_experiment():
     plt.title('Uncertainty Calibration over Training')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.savefig('../results/e6_nll.png')
+    nll_path = os.path.join(RESULTS_DIR, 'e6_nll.png')
+    plt.savefig(nll_path)
     plt.close()
-    print("Saved NLL Calibration plot to results/e6_nll.png")
+    print(f"Saved NLL Calibration plot to {nll_path}")
 
     # 2. Plot 2-Body Orbit with Epistemic Uncertainty
     t = np.linspace(0, 4*np.pi, 200)
@@ -82,9 +89,10 @@ def run_uncertainty_experiment():
     plt.title('Ensemble MNN: 2-Body Orbit Prediction with Uncertainty')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.savefig('../results/e6_orbit.png')
+    orbit_path = os.path.join(RESULTS_DIR, 'e6_orbit.png')
+    plt.savefig(orbit_path)
     plt.close()
-    print("Saved Orbit Uncertainty plot to results/e6_orbit.png")
+    print(f"Saved Orbit Uncertainty plot to {orbit_path}")
 
 if __name__ == "__main__":
     run_uncertainty_experiment()

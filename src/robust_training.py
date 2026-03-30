@@ -1,8 +1,13 @@
 import os
+import sys
 import torch
 import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+RESULTS_DIR = os.path.join(PROJECT_ROOT, 'results')
 
 from mnn_core import BaseMNN
 
@@ -40,7 +45,7 @@ def train_robust_mnn_step(model, input_data, optimizer, current_tau, lambda_cons
     return loss.item()
 
 def run_robustness_experiment():
-    os.makedirs('../results', exist_ok=True)
+    os.makedirs(RESULTS_DIR, exist_ok=True)
     print("Running Robust Training Regimes Experiment...")
 
     # 1. Plot Forecasting Error vs Horizon (Curriculum Learning)
@@ -59,9 +64,10 @@ def run_robustness_experiment():
     plt.title('Forecasting Error vs. Horizon (2-Body System)')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.savefig('../results/e7_curriculum.png')
+    curriculum_path = os.path.join(RESULTS_DIR, 'e7_curriculum.png')
+    plt.savefig(curriculum_path)
     plt.close()
-    print("Saved Curriculum Learning plot to results/e7_curriculum.png")
+    print(f"Saved Curriculum Learning plot to {curriculum_path}")
 
     # 2. Plot Coefficient Convergence (Multi-Trajectory Consistency)
     t_epochs = np.arange(1, 101)
@@ -77,9 +83,10 @@ def run_robustness_experiment():
     plt.title('Coefficient Convergence and Stability')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.savefig('../results/e7_coef.png')
+    coef_path = os.path.join(RESULTS_DIR, 'e7_coef.png')
+    plt.savefig(coef_path)
     plt.close()
-    print("Saved Coefficient Convergence plot to results/e7_coef.png")
+    print(f"Saved Coefficient Convergence plot to {coef_path}")
 
 if __name__ == "__main__":
     run_robustness_experiment()
